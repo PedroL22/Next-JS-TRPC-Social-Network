@@ -4,16 +4,15 @@ import { useState, type FC, type FormEvent } from 'react'
 
 import { api } from '@/trpc/react'
 
+import { useToast } from '@/app/_hooks'
+
 export const PostTextArea: FC = () => {
-  const [text, setText] = useState('')
   const { data: userData } = api.auth.userData.useQuery()
+  const [text, setText] = useState('')
 
   const { mutate: createPost } = api.post.create.useMutation({
-    onSuccess: () => {
-      setText('')
-    },
     onError: () => {
-      console.log('Error creating post.')
+      useToast('Error creating post.', 'error')
     },
   })
 
@@ -24,7 +23,7 @@ export const PostTextArea: FC = () => {
       return console.log('User not logged in.')
     }
 
-    createPost({
+    return createPost({
       userId: userData.id,
       text,
     })

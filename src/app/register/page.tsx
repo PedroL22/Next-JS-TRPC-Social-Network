@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 import { api } from '@/trpc/react'
+
+import { useToast } from '@/app/_hooks'
 
 export default function Register() {
   const [email, setEmail] = useState('')
@@ -13,16 +15,15 @@ export default function Register() {
   const router = useRouter()
 
   const { mutate: register } = api.auth.register.useMutation({
-    onSuccess: () => {
-      router.push('/')
-    },
     onError: () => {
-      console.log('Error registering user.')
+      useToast('Error registering user.', 'error')
     },
   })
 
-  const handleRegister = () => {
-    register({
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    return register({
       email,
       password,
     })
@@ -32,7 +33,7 @@ export default function Register() {
     <div className='mx-auto mt-20 flex w-11/12 flex-col rounded-xl border-[1px] border-purple-700 p-5 shadow-xl md:w-80'>
       <h1 className='text-center text-2xl font-bold text-purple-700'>Register</h1>
 
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <div className='flex w-full flex-col gap-1'>
           <fieldset>
             <label

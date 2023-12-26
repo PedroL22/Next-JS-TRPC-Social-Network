@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 
 import { api } from '@/trpc/react'
+
+import { useToast } from '@/app/_hooks'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -16,13 +18,15 @@ export default function Login() {
     onSuccess: () => {
       router.push('/')
     },
-    onError: () => {
-      console.log('Error logging in.')
+    onError: ({ message }) => {
+      useToast(message || 'Error logging in.', 'error')
     },
   })
 
-  const handleLogin = () => {
-    login({
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    return login({
       email,
       password,
     })
@@ -32,7 +36,7 @@ export default function Login() {
     <div className='mx-auto mt-20 flex w-11/12 flex-col rounded-xl border-[1px] border-purple-700 p-5 shadow-xl md:w-80'>
       <h1 className='text-center text-2xl font-bold text-purple-700'>Login</h1>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div className='flex w-full flex-col gap-1'>
           <fieldset>
             <label

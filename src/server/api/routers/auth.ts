@@ -16,10 +16,14 @@ export const authRouter = createTRPCRouter({
     }),
 
   login: publicProcedure.input(z.object({ email: z.string().email(), password: z.string() })).mutation(async (opts) => {
-    return await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: opts.input.email,
       password: opts.input.password,
     })
+
+    if (error) {
+      throw new Error(error.message)
+    } else return data.session
   }),
 
   logout: publicProcedure.mutation(async () => {
