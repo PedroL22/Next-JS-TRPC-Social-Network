@@ -1,6 +1,6 @@
-import { PostTextArea } from '@/app/_components/Home'
-
 import { api } from '@/trpc/server'
+
+import { PostTextArea } from '@/app/_components/Home'
 
 export default async function Home() {
   const postsData = await api.post.getAll.query()

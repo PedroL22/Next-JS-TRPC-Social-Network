@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState, type FC, type FormEvent } from 'react'
 
 import { api } from '@/trpc/react'
@@ -7,12 +8,18 @@ import { api } from '@/trpc/react'
 import { useToast } from '@/app/_hooks'
 
 export const PostTextArea: FC = () => {
-  const { data: userData } = api.auth.userData.useQuery()
   const [text, setText] = useState('')
+  const { data: userData } = api.auth.userData.useQuery()
+
+  const router = useRouter()
 
   const { mutate: createPost } = api.post.create.useMutation({
-    onError: () => {
-      useToast('Error creating post.', 'error')
+    onSuccess: () => {
+      setText('')
+      router.refresh()
+    },
+    onError: ({ message }) => {
+      useToast(message || 'Error creating post.', 'error')
     },
   })
 
@@ -20,7 +27,7 @@ export const PostTextArea: FC = () => {
     e.preventDefault()
 
     if (!userData?.id) {
-      return console.log('User not logged in.')
+      return useToast('User not logged in.', 'error')
     }
 
     return createPost({

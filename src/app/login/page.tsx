@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState, type FormEvent } from 'react'
 
 import { api } from '@/trpc/react'
@@ -12,11 +11,9 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const router = useRouter()
-
-  const { mutate: login } = api.auth.login.useMutation({
+  const { mutate: loginMutation } = api.auth.login.useMutation({
     onSuccess: () => {
-      router.push('/')
+      location.replace('/')
     },
     onError: ({ message }) => {
       useToast(message || 'Error logging in.', 'error')
@@ -26,7 +23,7 @@ export default function Login() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    return login({
+    return loginMutation({
       email,
       password,
     })

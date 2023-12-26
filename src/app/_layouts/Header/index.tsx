@@ -5,14 +5,16 @@ import { type FC } from 'react'
 
 import { api } from '@/trpc/react'
 
+import { useToast } from '@/app/_hooks'
+
 export const Header: FC = () => {
   const { data, isLoading } = api.auth.userData.useQuery()
   const { mutate: logout } = api.auth.logout.useMutation({
     onSuccess: () => {
       location.reload()
     },
-    onError: () => {
-      console.log('Error logging out.')
+    onError: ({ message }) => {
+      useToast(message || 'Error logging out.', 'error')
     },
   })
 

@@ -1,8 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { useState, type FormEvent } from 'react'
 
 import { api } from '@/trpc/react'
 
@@ -12,18 +11,19 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const router = useRouter()
-
-  const { mutate: register } = api.auth.register.useMutation({
-    onError: () => {
-      useToast('Error registering user.', 'error')
+  const { mutate: registerMutation } = api.auth.register.useMutation({
+    onSuccess: () => {
+      location.replace('/')
+    },
+    onError: ({ message }) => {
+      useToast(message || 'Error registering user.', 'error')
     },
   })
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    return register({
+    return registerMutation({
       email,
       password,
     })
