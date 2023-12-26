@@ -1,44 +1,26 @@
 'use client'
 
-import { api } from '@/trpc/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+
+import { api } from '@/trpc/react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const router = useRouter()
+
   const { data, isLoading } = api.auth.userData.useQuery()
-  const { mutate: register } = api.auth.register.useMutation({
-    onSuccess: () => {
-      location.reload()
-    },
-    onError: () => {
-      console.log('Error registering user.')
-    },
-  })
   const { mutate: login } = api.auth.login.useMutation({
     onSuccess: () => {
-      location.reload()
+      router.push('/')
     },
     onError: () => {
       console.log('Error logging in.')
     },
   })
-  const { mutate: logout } = api.auth.logout.useMutation({
-    onSuccess: () => {
-      location.reload()
-    },
-    onError: () => {
-      console.log('Error logging out.')
-    },
-  })
-
-  const handleRegister = () => {
-    register({
-      email,
-      password,
-    })
-  }
 
   const handleLogin = () => {
     login({
@@ -73,32 +55,18 @@ export default function Login() {
       )}
 
       <div className='flex flex-col gap-2'>
-        {isLoading ? (
-          <p className='text-white'>Loading...</p>
-        ) : data?.email?.length ? (
-          <button
-            onClick={() => logout()}
-            className='rounded-df bg-white py-2 text-purple-700'
-          >
-            Logout
-          </button>
-        ) : (
-          <>
-            <button
-              onClick={handleRegister}
-              className='rounded-md bg-white py-2 text-purple-700'
-            >
-              Register
-            </button>
+        <button
+          onClick={handleLogin}
+          className='rounded-md bg-white py-2 text-purple-700'
+        >
+          Login
+        </button>
 
-            <button
-              onClick={handleLogin}
-              className='rounded-md bg-white py-2 text-purple-700'
-            >
-              Login
-            </button>
-          </>
-        )}
+        <div>
+          <p>Don't have an account?</p>
+
+          <Link href='/register'>Register</Link>
+        </div>
       </div>
     </div>
   )

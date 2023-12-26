@@ -36,7 +36,7 @@ export const PostTextArea: FC = () => {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder='What do you want to talk about?'
-        className='border-2 border-purple-700'
+        className='border-2 border-purple-700 p-10'
       />
 
       <button
