@@ -12,7 +12,6 @@ export default function Login() {
 
   const router = useRouter()
 
-  const { data, isLoading } = api.auth.userData.useQuery()
   const { mutate: login } = api.auth.login.useMutation({
     onSuccess: () => {
       router.push('/')
@@ -30,43 +29,67 @@ export default function Login() {
   }
 
   return (
-    <div className='flex w-56 flex-col bg-purple-700 p-5'>
-      {isLoading ? (
-        <p className='text-white'>Loading...</p>
-      ) : data?.email?.length ? (
-        <p className='text-white'>Logged in.</p>
-      ) : (
-        <div className='mb-5 flex w-full flex-col gap-1'>
-          <input
-            name='email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            className='w-full rounded-md border-[1px] border-white py-2'
-          />
+    <div className='mx-auto mt-20 flex w-11/12 flex-col rounded-xl border-[1px] border-purple-700 p-5 shadow-xl md:w-80'>
+      <h1 className='text-center text-2xl font-bold text-purple-700'>Login</h1>
 
-          <input
-            type='password'
-            name='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className='w-full rounded-md border-[1px] border-white py-2'
-          />
+      <form onSubmit={handleLogin}>
+        <div className='flex w-full flex-col gap-1'>
+          <fieldset>
+            <label
+              htmlFor='email'
+              className='text-sm text-purple-700'
+            >
+              E-mail
+            </label>
+
+            <input
+              id='email'
+              name='email'
+              type='email'
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              placeholder='Enter your e-mail'
+              className='w-full rounded-md border-[1px] border-purple-700 p-2 outline-none'
+            />
+          </fieldset>
+
+          <fieldset>
+            <label
+              htmlFor='password'
+              className='text-sm text-purple-700'
+            >
+              Password
+            </label>
+
+            <input
+              id='password'
+              name='password'
+              type='password'
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              placeholder='Enter your password'
+              className='w-full rounded-md border-[1px] border-purple-700 p-2 outline-none'
+            />
+          </fieldset>
         </div>
-      )}
 
-      <div className='flex flex-col gap-2'>
         <button
-          onClick={handleLogin}
-          className='rounded-md bg-white py-2 text-purple-700'
+          type='submit'
+          className='mt-3 w-full rounded-md bg-purple-700 p-2 font-bold text-white transition-all ease-in hover:bg-purple-800'
         >
           Login
         </button>
+      </form>
 
-        <div>
-          <p>Don't have an account?</p>
+      <div className='mt-3 flex gap-1 text-sm text-purple-700'>
+        <p>Don't have an account?</p>
 
-          <Link href='/register'>Register</Link>
-        </div>
+        <Link
+          href='/register'
+          className='font-bold hover:underline'
+        >
+          Register
+        </Link>
       </div>
     </div>
   )

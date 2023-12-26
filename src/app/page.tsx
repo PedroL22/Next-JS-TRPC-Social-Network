@@ -7,7 +7,7 @@ export default async function Home() {
   const userData = await api.auth.userData.query()
 
   return (
-    <main className='mx-auto w-full max-w-screen-sm bg-gray-200'>
+    <main className='mx-auto w-full max-w-screen-sm bg-gray-100'>
       {userData?.id && <PostTextArea />}
 
       {postsData[0] && <pre>{JSON.stringify(postsData, null, 2)}</pre>}
