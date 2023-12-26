@@ -1,6 +1,5 @@
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { supabase } from '@/server/supabase/client'
-import { cookies } from 'next/headers'
 import { z } from 'zod'
 
 export const authRouter = createTRPCRouter({
@@ -24,13 +23,7 @@ export const authRouter = createTRPCRouter({
   }),
 
   logout: publicProcedure.mutation(async () => {
-    const authCookies = cookies()
-      .getAll()
-      .filter((cookie) => cookie.name.includes('auth-token'))
-
-    if (authCookies.length) {
-      return authCookies.forEach((cookie) => cookies().delete(cookie.name))
-    }
+    return await supabase.auth.signOut()
   }),
 
   userData: publicProcedure.query(async () => {

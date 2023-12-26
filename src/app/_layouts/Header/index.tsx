@@ -7,7 +7,14 @@ import { api } from '@/trpc/react'
 
 export const Header: FC = () => {
   const { data, isLoading } = api.auth.userData.useQuery()
-  const logout = api.auth.logout.useMutation().mutate
+  const { mutate: logout } = api.auth.logout.useMutation({
+    onSuccess: () => {
+      location.reload()
+    },
+    onError: () => {
+      console.log('Error logging out.')
+    },
+  })
 
   return (
     <header className='flex h-24 w-screen justify-center bg-purple-600 text-white'>
