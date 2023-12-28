@@ -17,6 +17,7 @@ export default async function Home() {
               key={post.id}
               author_id={post.author_id}
               text={post.text}
+              date={post.created_at}
             />
           ))}
       </div>
