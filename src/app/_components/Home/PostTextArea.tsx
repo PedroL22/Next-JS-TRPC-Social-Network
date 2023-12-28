@@ -37,17 +37,20 @@ export const PostTextArea: FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className='flex flex-col gap-1 rounded-xl'
+    >
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder='What do you want to talk about?'
-        className='border-2 border-purple-700 p-10'
+        className='resize-none rounded-xl border-[1px] border-purple-700 p-3 outline-none'
       />
 
       <button
         type='submit'
-        className='bg-purple-700 font-bold text-white transition-all ease-in hover:bg-purple-700'
+        className='w-32 rounded-md bg-purple-700 p-3 font-bold text-white transition-all ease-in hover:bg-purple-800'
       >
         Submit
       </button>

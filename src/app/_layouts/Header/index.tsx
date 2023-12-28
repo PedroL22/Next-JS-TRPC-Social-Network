@@ -19,7 +19,7 @@ export const Header: FC = () => {
   })
 
   return (
-    <header className='flex h-24 w-screen justify-center bg-purple-600 text-white'>
+    <header className='flex h-24 w-full justify-center bg-purple-600 text-white'>
       <nav className='flex w-full max-w-screen-2xl items-center justify-between px-10 text-lg'>
         <Link
           href='/'
